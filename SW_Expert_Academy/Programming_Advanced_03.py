@@ -34,45 +34,32 @@
 
 ### problem 2
 
-def dfs(num,idx):
-    num+=1
-    while idx<24:
-        if total_array[idx]!=0:
-            idx = total_array[idx][1]
-            num+=1
-        else:
-            idx+=1
-    return num
-
 T = int(input())
 
-for test_case in range(1, T + 1):
-    nums = int(input())
-    total_array=[0]*24
-    array = [list(map(int, input().split())) for _ in range(nums)]
-    array.sort()
-    start = 0
+for tc in range(1, T+1):
+    N = int(input())
+    info = [list(map(int, input().split()))for _ in range(N)]
 
-    while True:
-        if start == len(array)-1:
-            break
-        if array[start][0] == array[start+1][0]:
-            array.remove(array[start+1])
-        else:
-            start +=1
+    # 종료시간으로 정렬후 차근차근 겹치는 시간이 없도록 비교해본다.
 
-    for i in range(len(array)):
-        total_array[array[i][0]]=array[i]
+    # 종료시간을 기준으로 정렬을 할것이다.
+    sorted_info = sorted(info, key=lambda x: x[1])
+    # 카운트 횟수
+    cnt = 0
+    # 현재 종료시간
+    now = 0
+    # 돌면서 검사
+    for i in range(N):
+        # 시작시간정의
+        s = sorted_info[i][0]
+        # 종료시간 정의
+        e = sorted_info[i][1]
+        # 만약 작업시간이 안겹친다면, 즉 종료시간보다 크거나 같다면
+        if now <= s:
+            # 할수있음
+            cnt += 1
+            # 종료 예정시간 갱신
+            now = e
 
-    result=0
 
-    for i in range(24):
-        b=0
-        if total_array[i]==0:
-            pass
-        else:
-            calc = dfs(b, total_array[i][1])
-            if result<calc:
-                result = calc
-
-    print(f"#{test_case} {result}")
+    print("#{} {}".format(tc, cnt ))
